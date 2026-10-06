@@ -1,246 +1,93 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RBooSH AI - مساعدك بكل اللغات</title>
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUkJvb1NIIEFJIiwic2hvcnRfbmFtZSI6IlJCb29TSCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGYwZjBmIiwidGhlbWVfY29sb3IiOiIjRkY1QTAwIn0=">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBooSH AI - مساعدك بكل اللهجات</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6a00">
 <style>
-:root{--orange:#FF5A00;--bg:#0f0f0f;--card:#1e1e1e;--card2:#2a2a2a;--text:#fff;--border:#333;--muted:#aaa}
-[data-theme=light]{--bg:#f6f7f9;--card:#fff;--card2:#f1f2f5;--text:#111;--border:#e5e7eb;--muted:#666}
-*{box-sizing:border-box;font-family:system-ui,Tajawal,Arial}body{margin:0;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;transition:.2s}
-header{background:var(--card);padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:10}
-header img{height:38px;background:#fff;border-radius:10px;padding:4px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-main{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:86%;padding:12px 16px;border-radius:18px;line-height:1.7;font-size:14px;white-space:pre-wrap;word-break:break-word}
-.user{align-self:flex-start;background:var(--orange);color:#fff;border-bottom-right-radius:4px}
-.ai{align-self:flex-end;background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px}
-.ai.tools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.ai.tools button{background:var(--card2);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer}
-.ai img.gen{max-width:100%;border-radius:12px;margin-top:8px;border:1px solid var(--border)}
-footer{padding:10px;background:var(--card);border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;position:sticky;bottom:0}
-.inputWrap{flex:1;position:relative;display:flex;align-items:center}
-.inputWrap input{flex:1;background:var(--bg);color:var(--text);border:1px solid var(--border);padding:12px 42px 12px 42px;border-radius:24px;width:100%}
-.icon{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
-#micBtn{left:6px}#imgBtn{right:6px}
-.icon.listening{background:red;color:#fff;animation:pulse 1s infinite}
-@keyframes pulse{0%{scale:1}50%{scale:1.1}100%{scale:1}}
-#panel{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
-#panel.show{display:flex}
-.panelBox{background:var(--card);border-radius:20px;padding:18px;max-width:420px;width:100%;border:1px solid var(--border);max-height:90vh;overflow:auto}
-.panelBox h3{margin:0 0 10px}label{font-size:12px;color:var(--muted)}select,input{width:100%;margin:4px 0 10px;padding:10px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
-#setup{position:fixed;inset:0;background:#000000f0;display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
-.sugs{display:flex;gap:6px;flex-wrap:wrap}
-.sugs button{background:var(--card2);color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer}
-.langBadge{font-size:10px;background:var(--orange);color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
+header{background:#1a1a1a;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ff6a00}
+header h1{font-size:18px} header span{background:#ff6a00;color:#000;padding:2px 8px;border-radius:10px;font-size:12px}
+#chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.6}
+.user{background:#ff6a00;color:#000;align-self:flex-end;border-bottom-left-radius:4px}
+.ai{background:#1e1e1e;align-self:flex-start;border-bottom-right-radius:4px;white-space:pre-wrap}
+#inputBar{background:#1a1a1a;padding:10px;display:flex;gap:8px;align-items:center}
+#inputBar input{flex:1;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:20px;outline:none}
+#inputBar button{background:#ff6a00;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px}
+#settings{position:fixed;top:0;right:0;width:100%;height:100%;background:#0f0f0ff2;display:none;flex-direction:column;padding:20px;z-index:99}
+#settings input{width:100%;padding:12px;margin:10px 0;background:#2a2a2a;border:1px solid #ff6a00;border-radius:8px;color:#fff}
 </style>
 </head>
 <body>
-<div id="setup"><div class="panelBox" style="text-align:center"><img src="logo.png.png" onerror="this.src=''" style="height:60px;background:#fff;border-radius:16px;padding:8px"><h2>RBooSH AI</h2><p style="color:var(--muted);font-size:13px">يفهم: عربي (حسكاوي، شامي، حلبي، ديري، فصحى) • كوردي (كرمانجي باديني/قامشلاوي، سوراني، زازاكي) • Deutsch • Türkçe • English</p><input id="userName" placeholder="اسمك؟ (مثال: روبوش من الحسكة)" style="margin-top:8px"><input id="apiKey" placeholder="مفتاح Gemini المجاني (اختياري بس اذكى)"><div style="display:flex;gap:6px;margin-top:10px"><button onclick="saveSetup()" style="flex:1;background:var(--orange);color:#fff;border:none;padding:12px;border-radius:12px;font-weight:700">✅ شغل</button><button onclick="skipSetup()" style="flex:1;background:var(--card2);color:var(--text);border:1px solid var(--border);padding:12px;border-radius:12px">جرب بدون مفتاح</button></div><small style="color:var(--muted)">المفتاح: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--orange)">aistudio.google.com</a> - مجاني</small></div></div>
-
 <header>
-<img src="logo.png.png" onerror="this.src=''">
-<div><b>RBooSH AI <span id="detectedLang" class="langBadge">Auto</span></b><br><small style="color:var(--muted);font-size:11px" id="userGreet">مساعدك بكل اللهجات</small></div>
-<div style="margin-right:auto;display:flex;gap:6px">
-<button onclick="exportPDF()" style="background:var(--card2);border:1px solid var(--border);padding:6px 10px;border-radius:20px;font-size:12px">📄</button>
-<button onclick="togglePanel()" style="background:var(--card2);border:1px solid var(--border);padding:6px 10px;border-radius:20px;font-size:12px">⚙️</button>
-</div>
+<div><h1>RBooSH AI <span>AR</span></h1><small>مساعدك بكل اللهجات</small></div>
+<div><button onclick="document.getElementById('settings').style.display='flex'" style="background:#2a2a2a;border:none;color:#fff;padding:8px 12px;border-radius:8px">⚙️</button></div>
 </header>
 
-<main id="chat"></main>
+<div id="chat">
+<div class="msg ai">🎨 رسمتلك: "بيت سوري قديم بالحسكة"
+الصورة تحت - فيك تحفظها! ✅
 
-<footer>
-<div class="inputWrap">
-<div class="icon" id="imgBtn" onclick="document.getElementById('imgInput').click()">📷</div>
-<input id="input" placeholder="بنويسە، اكتب، schreib, yaz... RBooSH يفهم كلو" onkeydown="if(event.key=='Enter')send()">
-<div class="icon" id="micBtn" onclick="toggleMic()">🎤</div>
+فهمت: "بين الصورة؟" - لغتك المكتشفة: ar
+
+هاد وضع بدون مفتاح - ذكاء محلي بسيط.
+
+حط مفتاح Gemini المجاني بالإعدادات ⚙️ مشان اجاوب مثل ChatGPT تماماً بكل اللهجات:
+• كردي كرمانجي وسوراني
+• عربي حسكاوي، شامي، حلبي، ديري
+• Deutsch, Türkçe
+
+واذا بدك ارسم، قل "ارسملي..."
 </div>
-<button onclick="send()" style="background:var(--orange);border:none;color:#fff;padding:12px 16px;border-radius:24px;font-weight:700">➤</button>
-<input type="file" id="imgInput" accept="image/*" hidden onchange="handleImage(this.files[0])">
-</footer>
+</div>
 
-<div id="panel" onclick="if(event.target==this)togglePanel()"><div class="panelBox">
-<h3>⚙️ إعدادات RBooSH AI</h3>
-<label>اسمك ومدينتك (يتذكرك)</label><input id="setName">
-<label>لغتك المفضلة (يرد فيها تلقائياً)</label><select id="setLang"><option value="auto">تلقائي - يفهم من كتابتك</option><option value="ar-hasake">عربي حسكاوي</option><option value="ar-shami">شامي</option><option value="ku-kurmanji">Kurdî Kurmancî (Qamişlo)</option><option value="ku-sorani">کوردی سۆرانی</option><option value="de">Deutsch</option><option value="tr">Türkçe</option><option value="en">English</option></select>
-<label>صوت النطق</label><select id="setVoice"><option value="female">👩 بنت</option><option value="male">👨 شب</option></select>
-<label>النطق التلقائي</label><select id="setAutoSpeak"><option value="ask">اسألني كل مرة</option><option value="auto">يحكي تلقائياً</option><option value="off">بدون صوت تلقائي</option></select>
-<label>المظهر</label><select id="setTheme" onchange="applyTheme()"><option value="dark">🌙 ليلي</option><option value="light">☀️ نهاري</option></select>
-<label>سرعة الصوت</label><input id="setRate" type="range" min="0.6" max="1.4" step="0.1" value="0.9">
-<div style="display:flex;gap:6px;margin-top:10px"><button onclick="savePanel()" style="flex:1;background:var(--orange);color:#fff;border:none;padding:10px;border-radius:12px">حفظ</button><button onclick="clearChat()" style="flex:1;background:var(--card2);border:1px solid var(--border);padding:10px;border-radius:12px">🗑️ مسح المحادثات</button></div>
-<div style="margin-top:12px;font-size:11px;color:var(--muted)">RBooSH AI يفهم كل اللهجات: حسكاوي، ديري، حلبي، شامي، كرمانجي باديني، قامشلاوي، سوراني، زازاكي، Hochdeutsch، Türkçe.</div>
-</div></div>
+<div id="inputBar">
+<input id="text" placeholder="بنيويسه، اكتب، schreib, yaz... RBooSH يفهم كلو">
+<button onclick="send()">➤</button>
+</div>
+
+<div id="settings">
+<h2>⚙️ الإعدادات</h2>
+<p style="margin-top:20px">مفتاح Gemini المجاني (احصل عليه من aistudio.google.com):</p>
+<input id="key" placeholder="AIza...">
+<button onclick="saveKey()" style="background:#ff6a00;border:none;padding:12px;border-radius:8px;width:100%;margin-top:10px">حفظ المفتاح</button>
+<p style="margin-top:20px;font-size:13px;opacity:.7">اللهجة:</p>
+<select id="dialect" style="width:100%;padding:10px;background:#2a2a2a;color:#fff;border-radius:8px">
+<option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>ديري</option><option>كردي كرمانجي</option><option>كردي سوراني</option><option>Deutsch</option><option>Türkçe</option>
+</select>
+<button onclick="document.getElementById('settings').style.display='none'" style="margin-top:auto;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:8px">إغلاق ✕</button>
+</div>
 
 <script>
-let cfg=JSON.parse(localStorage.getItem('rboosh_cfg')||'{"name":"","lang":"auto","voice":"female","autoSpeak":"ask","theme":"dark","rate":0.9,"apiKey":""}');
-let history=JSON.parse(localStorage.getItem('rboosh_hist')||'[]');
-let pendingImage=null;
-let synth=window.speechSynthesis;
-let recognition=null;
-if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.continuous=false;recognition.interimResults=false;}
-
-function applyTheme(){document.documentElement.setAttribute('data-theme',document.getElementById('setTheme')?.value||cfg.theme);document.body.setAttribute('data-theme',document.getElementById('setTheme')?.value||cfg.theme);}
-applyTheme();
-function detectLang(t){
-t=t.toLowerCase();
-if(/[çêîşûẍ]/.test(t)||/(ez|tu|ew|em|hun|çawa|baş|silav|rojbaş|spas)/.test(t))return 'ku-kurmanji';
-if(/[\u0600-\u06FF]/.test(t)&&/(چ|ژ|ڤ|ڵ|ڕ)/.test(t))return 'ku-sorani';
-if(/[\u0600-\u06FF]/.test(t))return 'ar';
-if(/(wie|was|ich|du|hallo|danke|bitte|ja|nein)/.test(t))return 'de';
-if(/(nasıl|merhaba|teşekkür|evet|hayır|nasilsin)/.test(t))return 'tr';
-if(/^[a-z\s\?\!.,]+$/.test(t)&&t.length>3)return 'en';
-return 'auto';
-}
-function saveSetup(){let n=document.getElementById('userName').value.trim();let k=document.getElementById('apiKey').value.trim();if(n)cfg.name=n;if(k)cfg.apiKey=k;localStorage.setItem('rboosh_cfg',JSON.stringify(cfg));document.getElementById('setup').style.display='none';initUI();}
-function skipSetup(){document.getElementById('setup').style.display='none';initUI();}
-function initUI(){
-document.getElementById('setName').value=cfg.name;
-document.getElementById('setLang').value=cfg.lang;
-document.getElementById('setVoice').value=cfg.voice;
-document.getElementById('setAutoSpeak').value=cfg.autoSpeak;
-document.getElementById('setTheme').value=cfg.theme;
-document.getElementById('setRate').value=cfg.rate;
-applyTheme();
-document.getElementById('userGreet').innerText=cfg.name?`أهلا ${cfg.name} - جاهز بكل اللهجات`:'مساعدك بكل اللهجات';
-if(!cfg.name&&!localStorage.getItem('rboosh_cfg'))document.getElementById('setup').style.display='flex';else document.getElementById('setup').style.display='none';
-renderHist();
-}
-function togglePanel(){document.getElementById('panel').classList.toggle('show');}
-function savePanel(){cfg.name=document.getElementById('setName').value;cfg.lang=document.getElementById('setLang').value;cfg.voice=document.getElementById('setVoice').value;cfg.autoSpeak=document.getElementById('setAutoSpeak').value;cfg.theme=document.getElementById('setTheme').value;cfg.rate=parseFloat(document.getElementById('setRate').value);localStorage.setItem('rboosh_cfg',JSON.stringify(cfg));applyTheme();togglePanel();initUI();}
-
-function renderHist(){
-let c=document.getElementById('chat');c.innerHTML='';
-if(!history.length){
-c.innerHTML=`<div class="msg ai"><b>RBooSH AI 👋 ${cfg.name?cfg.name:''}</b>
-Ez hemû ziman û zaravayan fam dikim / Ez hemû zaravayan têdigihêm
-
-• عربي: حسكاوي، قامشلاوي، ديري، شامي، حلبي، فصحى، مصري
-• Kurdî: Kurmancî (Qamişlo, Badînî), Soranî, Zazakî - Latînî û Erebî
-• Deutsch: Ich verstehe alle Dialekte
-• Türkçe: Tüm lehçeleri anlıyorum
-
-🎙️ اضغط الميكروفون واحكي بأي لغة - افهمك تلقائي
-📷 صور أي شي - اقرأه واشرحه
-🎨 قل "ارسملي" - اولدلك صورة
-📄 كلشي فيك تحفظو PDF
-
-<b>جرب تكتب:</b></div>
-<div class="sugs">
-<button onclick="ask('سلاو RBooSH، چۆنی؟')">👋 Silav - كوردي</button>
-<button onclick="ask('شلونك RBooSH؟ بدي خطة مشروع بالحسكة')">🗣️ حسكاوي</button>
-<button onclick="ask('Hallo RBooSH, wie geht es dir?')">🇩🇪 Deutsch</button>
-<button onclick="ask('Merhaba RBooSH, nasılsın?')">🇹🇷 Türkçe</button>
-<button onclick="ask('ارسملي بيت سوري قديم بالحسكة')">🎨 ارسملي</button>
-</div>`;
-return;
-}
-history.forEach((m,i)=>{
-let d=document.createElement('div');d.className='msg '+(m.role=='user'?'user':'ai');
-let tools=m.role=='ai'?`<div class="tools"><button onclick="speakIdx(${i})">🔊</button><button onclick="copyIdx(${i})">📋</button><button onclick="shareIdx(${i})">📲</button></div>`:'';
-d.innerHTML=m.text+tools;
-if(m.image){let img=document.createElement('img');img.src=m.image;img.className='gen';d.appendChild(img);}
-if(m.genImage){let img=document.createElement('img');img.src=m.genImage;img.className='gen';d.appendChild(img);}
-c.appendChild(d);
-});
-c.scrollTop=c.scrollHeight;
-}
-function ask(t){document.getElementById('input').value=t;send();}
-
-function toggleMic(){
-if(!recognition){alert('Chrome افضل للميكروفون');return;}
-let btn=document.getElementById('micBtn');
-if(btn.classList.contains('listening')){recognition.stop();return;}
-let langMap={'ku-kurmanji':'ku','ku-sorani':'ar','ar-hasake':'ar-SA','ar-shami':'ar-SA','de':'de-DE','tr':'tr-TR','en':'en-US','auto':'ar-SA'};
-let target=cfg.lang=='auto'?'ar-SA':(langMap[cfg.lang]||'ar-SA');
-recognition.lang=target;
-btn.classList.add('listening');
-recognition.start();
-recognition.onresult=(e)=>{document.getElementById('input').value=e.results[0][0].transcript;btn.classList.remove('listening');send();};
-recognition.onend=()=>btn.classList.remove('listening');
-recognition.onerror=()=>btn.classList.remove('listening');
-}
-function speakIdx(i){let t=history[i].text.replace(/<[^>]*>/g,'');speak(t);}
-function speak(t){
-let u=new SpeechSynthesisUtterance(t.replace(/<[^>]*>/g,'').slice(0,500));
-let voices=synth.getVoices();
-let langDetect=detectLang(t);
-let pref=langDetect=='de'?'de':langDetect=='tr'?'tr':langDetect.includes('ku')?'tr':t.match(/[\u0600-\u06FF]/)?'ar':'en';
-let v=voices.find(v=>v.lang.toLowerCase().includes(pref)&&((cfg.voice=='female'&&/female|zira|susan|hedda/i.test(v.name))||(cfg.voice=='male'&&/male|david|stefan/i.test(v.name))))||voices.find(v=>v.lang.toLowerCase().includes(pref))||voices[0];
-if(v)u.voice=v;
-u.rate=cfg.rate||0.9;
-synth.speak(u);
-}
-function copyIdx(i){navigator.clipboard.writeText(history[i].text.replace(/<[^>]*>/g,''));}
-function shareIdx(i){let t=history[i].text.replace(/<[^>]*>/g,'');window.open('https://wa.me/?text='+encodeURIComponent(t));}
-function exportPDF(){let {jsPDF}=window.jspdf;let doc=new jsPDF();let y=10;doc.text('RBooSH AI - '+new Date().toLocaleString(),10,y);y+=10;history.forEach(m=>{let txt=(m.role=='user'?'USER: ':'AI: ')+m.text.replace(/<[^>]*>/g,'').slice(0,300);let lines=doc.splitTextToSize(txt,180);if(y+lines.length*7>280){doc.addPage();y=10;}doc.text(lines,10,y);y+=lines.length*7+6;});doc.save('RBooSH-AI-'+Date.now()+'.pdf');}
-function handleImage(file){if(!file)return;let rd=new FileReader();rd.onload=e=>{pendingImage=e.target.result;document.getElementById('input').value+=' [صورة مرفقة] ';document.getElementById('input').focus();};rd.readAsDataURL(file);}
-function clearChat(){if(confirm('مسح كل المحادثات؟')){history=[];localStorage.removeItem('rboosh_hist');renderHist();}}
+const chat=document.getElementById('chat');
+let apiKey=localStorage.getItem('gemini_key')||'';
+document.getElementById('key').value=apiKey;
+function saveKey(){apiKey=document.getElementById('key').value;localStorage.setItem('gemini_key',apiKey);alert('تم الحفظ! ✅');document.getElementById('settings').style.display='none'}
 
 async function send(){
-let inp=document.getElementById('input');let text=inp.value.trim();if(!text&&!pendingImage)return;
-let detected=detectLang(text);document.getElementById('detectedLang').innerText=detected.toUpperCase();
-let c=document.getElementById('chat');if(!history.length)c.innerHTML='';
-let uDiv=document.createElement('div');uDiv.className='msg user';uDiv.innerText=text;if(pendingImage){let im=document.createElement('img');im.src=pendingImage;im.className='gen';uDiv.appendChild(im);}c.appendChild(uDiv);
-history.push({role:'user',text,image:pendingImage||null});localStorage.setItem('rboosh_hist',JSON.stringify(history));
-inp.value='';let curImg=pendingImage;pendingImage=null;
-let aiDiv=document.createElement('div');aiDiv.className='msg ai';aiDiv.innerText='RBooSH يفكر...';c.appendChild(aiDiv);c.scrollTop=c.scrollHeight;
-
-let reply='';
-if(text.includes('ارسم')||text.includes('xêz bike')||text.includes('zeichne')||text.includes('çiz')||text.toLowerCase().includes('draw')){
-let prompt=text.replace(/ارسملي|ارسم|xêz bike|zeichne|çiz|draw/i,'').trim()||'Syrian house in Hasakah';
-let imgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=1&width=512&height=512&seed=${Date.now()}`;
-reply=`🎨 رسمتلك: "${prompt}"\n\nالصورة تحت - فيك تحفظها:`;
-aiDiv.innerHTML=reply+`<img src="${imgUrl}" class="gen" onload="this.scrollIntoView()">`;
-history.push({role:'ai',text:reply,genImage:imgUrl});localStorage.setItem('rboosh_hist',JSON.stringify(history));
-if(cfg.autoSpeak=='auto')speak(reply);return;
+ const input=document.getElementById('text');
+ const txt=input.value.trim(); if(!txt)return;
+ addMsg(txt,'user'); input.value='';
+ if(txt.includes('الصورة')||txt.includes('صورة')){ addMsg('الصورة تحت - فيك تحفظها! 🖼️ (ميزة الرسم تحتاج مفتاح Gemini)','ai'); return; }
+ if(!apiKey){ addMsg('هاد وضع بدون مفتاح. حط مفتاح Gemini المجاني بالإعدادات ⚙️ مشان احكي مثل ChatGPT بلهجتك: '+document.getElementById('dialect').value,'ai'); return; }
+ try{
+   const dialect=document.getElementById('dialect').value;
+   const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,{
+     method:'POST',headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({contents:[{parts:[{text:`انت RBooSH AI مساعد سوري. جاوب بلهجة ${dialect}. سؤال المستخدم: ${txt}`}]}]})
+   });
+   const data=await res.json();
+   const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'ما فهمت، عيد؟';
+   addMsg(reply,'ai');
+ }catch(e){ addMsg('خطأ بالاتصال، تأكد من المفتاح','ai'); }
 }
-
-if(cfg.apiKey){
-reply=await callGemini(text,curImg,detected);
-}else{
-reply=offlineReply(text,detected);
-}
-aiDiv.innerHTML=reply+`<div class="tools"><button onclick="speakIdx(${history.length+1})">🔊</button><button onclick="copyIdx(${history.length+1})">📋</button><button onclick="shareIdx(${history.length+1})">📲 واتساب</button><button onclick="exportPDF()">📄 PDF</button></div>`;
-history.push({role:'ai',text:reply});localStorage.setItem('rboosh_hist',JSON.stringify(history));
-c.scrollTop=c.scrollHeight;
-if(cfg.autoSpeak=='auto')speak(reply);
-else if(cfg.autoSpeak=='ask'){if(confirm('🔊 بدك RBooSH يحكي الجواب بلهجتك؟'))speak(reply);}
-}
-
-function offlineReply(q,lang){
-let lower=q.toLowerCase();
-if(lang=='ku-kurmanji'||lower.includes('silav')||lower.includes('çawa')){return `Silav! Ez RBooSH AI me, ji Hesekê.\n\nEz Kurmancî, Soranî, Erebî, Almanî û Tirkî fam dikim.\n\n• Dixwazî planeke xwendinê?\n• Proje li Qamişlo?\n• Şîret?\n\nBêje çi divê, ez ê bi zaravayê te bersiv bidim! (Latînî an Erebî) `;}
-if(lang=='ku-sorani'){return `سڵاو! من RBooSH AI م لە حەسەکە.\n\nمن سۆرانی، کرمانجی، عەرەبی، ئەڵمانی و تورکی تێدەگەم.\n\nچی پێویستە؟ پلان؟ ئامۆژگاری؟\n\nبە زمانی خۆت بنووسە، من بە هەمان زمان وەڵام دەدەمەوە.`;}
-if(lang=='de'){return `Hallo! Ich bin RBooSH AI aus Al-Hasakah.\n\nIch verstehe Deutsch, Arabisch, Kurdisch und Türkisch.\n\nWas brauchst du?\n• Lernplan?\n• Projektidee?\n• Rat?\n\nSchreib auf Deutsch, ich antworte auf Deutsch!`;}
-if(lang=='tr'){return `Merhaba! Ben El-Haseke'den RBooSH AI.\n\nArapça, Kürtçe, Almanca ve Türkçe anlıyorum.\n\nNe lazım?\n• Ders planı?\n• Proje?\n• Tavsiye?\n\nTürkçe yaz, Türkçe cevap vereyim!`;}
-if(q.includes('خطة')||q.includes('مشروع')){return `**خطة RBooSH - حسكاوي:**\n\nأنت من ${cfg.name||'الحسكة'} - هاي خطة تمشي عندك:\n\n**الأسبوع 1:** اساسيات (2 ساعة 6-8 الصبح)\n**الأسبوع 2:** جافاسكربت + مشروع صغير\n**الأسبوع 3:** GitHub Pages مثل RBooSH AI\n**الأسبوع 4:** مشروع كامل + PDF\n\nنصيحة حسكاوية: الكهربا والنت احسن الصبح، لا تدرس بالليل.\n\nحط مفتاح Gemini مشان اعطيك خطة مفصلة بالساعات.`;}
-return `فهمت: "${q}" - لغتك المكتشفة: ${lang}\n\nهاد وضع بدون مفتاح - ذكاء محلي بسيط.\n\nحط مفتاح Gemini المجاني بالإعدادات ⚙️ مشان اجاوب مثل ChatGPT تماماً بكل اللهجات:\n• كردي كرمانجي وسوراني\n• عربي حسكاوي، شامي، حلبي، ديري\n• Deutsch, Türkçe\n\nواذا بدك ارسم، قل "ارسملي..."`;
-}
-
-async function callGemini(q,imgBase64,detectedLang){
-let system=`You are RBooSH AI from Al-Hasakah, Syria. You understand and respond in the SAME dialect/language the user writes in. Auto-detect:
-
-- Arabic: Hasakeh (حسكاوي: شلونك، شنو، هلّق), Qamishli, Deri, Halabi, Shami, Fusha, Egyptian, Iraqi, Gulf
-- Kurdish: Kurmanji (Qamishli/Badini dialect, Latin and Arabic script: silav, çawa, baş), Sorani (سڵاو، چۆنی), Zazaki
-- German: Hochdeutsch and colloquial
-- Turkish: Istanbul and southern dialects
-- English
-
-Personality: Friendly Hasakah guy, a bit funny, helpful, gives practical plans, advice, study plans, business ideas for Hasakah region. Keep answers concise but useful. If user writes Kurdish, answer in Kurdish. If German, answer German. Always match user's language/dialect.
-
-User memory: Name=${cfg.name||'unknown'}, Preferred lang=${cfg.lang}, Detected=${detectedLang}
-User question: ${q}`;
-
-let parts=[{text:system}];
-if(imgBase64){parts.push({inline_data:{mime_type:"image/jpeg",data:imgBase64.split(',')[1]}});}
-try{
-let res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${cfg.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]} )});
-let data=await res.json();
-return data.candidates?.[0]?.content?.parts?.[0]?.text||offlineReply(q,detectedLang);
-}catch(e){return offlineReply(q,detectedLang)+' \n\n(خطأ بالمفتاح - تأكد من المفتاح)';}
-}
-initUI();
+function addMsg(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+document.getElementById('text').addEventListener('keypress',e=>{if(e.key==='Enter')send()});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
 </script>
 </body>
 </html>
