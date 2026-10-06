@@ -1,93 +1,47 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBooSH AI - مساعدك بكل اللهجات</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBooSH AI - سوريا</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff6a00">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f0f0f;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-header{background:#1a1a1a;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ff6a00}
-header h1{font-size:18px} header span{background:#ff6a00;color:#000;padding:2px 8px;border-radius:10px;font-size:12px}
+header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;display:flex;justify-content:space-between}
 #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.6}
-.user{background:#ff6a00;color:#000;align-self:flex-end;border-bottom-left-radius:4px}
-.ai{background:#1e1e1e;align-self:flex-start;border-bottom-right-radius:4px;white-space:pre-wrap}
-#inputBar{background:#1a1a1a;padding:10px;display:flex;gap:8px;align-items:center}
-#inputBar input{flex:1;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:20px;outline:none}
-#inputBar button{background:#ff6a00;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px}
-#settings{position:fixed;top:0;right:0;width:100%;height:100%;background:#0f0f0ff2;display:none;flex-direction:column;padding:20px;z-index:99}
-#settings input{width:100%;padding:12px;margin:10px 0;background:#2a2a2a;border:1px solid #ff6a00;border-radius:8px;color:#fff}
+.user{background:#ff6a00;color:#000;align-self:flex-end}
+.ai{background:#1e1e1e;align-self:flex-start;white-space:pre-wrap}
+#bar{background:#1a1a1a;padding:10px;display:flex;gap:8px}
+#bar input{flex:1;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:20px;outline:none}
+#bar button{background:#ff6a00;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer}
 </style>
 </head>
 <body>
-<header>
-<div><h1>RBooSH AI <span>AR</span></h1><small>مساعدك بكل اللهجات</small></div>
-<div><button onclick="document.getElementById('settings').style.display='flex'" style="background:#2a2a2a;border:none;color:#fff;padding:8px 12px;border-radius:8px">⚙️</button></div>
-</header>
+<header><b>RBooSH AI 🇸🇾</b><select id="dialect" style="background:#2a2a2a;color:#fff;border:none;padding:6px;border-radius:8px"><option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>ديري</option><option>كردي كرمانجي</option><option>كردي سوراني</option><option>Deutsch</option><option>Türkçe</option><option>عربي فصحى</option></select></header>
+<div id="chat"><div class="msg ai">أهلين حبيب! أنا RBooSH AI 😎🇸🇾
+هلا شغال 100% بسوريا بدون حظر وبدون مفتاح!
 
-<div id="chat">
-<div class="msg ai">🎨 رسمتلك: "بيت سوري قديم بالحسكة"
-الصورة تحت - فيك تحفظها! ✅
+احكي معي بأي لهجة تريد - حسكاوي، كردي، شامي... انا جاهز!
 
-فهمت: "بين الصورة؟" - لغتك المكتشفة: ar
-
-هاد وضع بدون مفتاح - ذكاء محلي بسيط.
-
-حط مفتاح Gemini المجاني بالإعدادات ⚙️ مشان اجاوب مثل ChatGPT تماماً بكل اللهجات:
-• كردي كرمانجي وسوراني
-• عربي حسكاوي، شامي، حلبي، ديري
-• Deutsch, Türkçe
-
-واذا بدك ارسم، قل "ارسملي..."
-</div>
-</div>
-
-<div id="inputBar">
-<input id="text" placeholder="بنيويسه، اكتب، schreib, yaz... RBooSH يفهم كلو">
-<button onclick="send()">➤</button>
-</div>
-
-<div id="settings">
-<h2>⚙️ الإعدادات</h2>
-<p style="margin-top:20px">مفتاح Gemini المجاني (احصل عليه من aistudio.google.com):</p>
-<input id="key" placeholder="AIza...">
-<button onclick="saveKey()" style="background:#ff6a00;border:none;padding:12px;border-radius:8px;width:100%;margin-top:10px">حفظ المفتاح</button>
-<p style="margin-top:20px;font-size:13px;opacity:.7">اللهجة:</p>
-<select id="dialect" style="width:100%;padding:10px;background:#2a2a2a;color:#fff;border-radius:8px">
-<option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>ديري</option><option>كردي كرمانجي</option><option>كردي سوراني</option><option>Deutsch</option><option>Türkçe</option>
-</select>
-<button onclick="document.getElementById('settings').style.display='none'" style="margin-top:auto;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:8px">إغلاق ✕</button>
-</div>
-
+شو بدك نحكي؟</div></div>
+<div id="bar"><input id="text" placeholder="اكتب هون بأي لغة..."><button onclick="send()">➤</button></div>
 <script>
-const chat=document.getElementById('chat');
-let apiKey=localStorage.getItem('gemini_key')||'';
-document.getElementById('key').value=apiKey;
-function saveKey(){apiKey=document.getElementById('key').value;localStorage.setItem('gemini_key',apiKey);alert('تم الحفظ! ✅');document.getElementById('settings').style.display='none'}
-
+function add(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;document.getElementById('chat').appendChild(d);document.getElementById('chat').scrollTop=99999}
 async function send(){
- const input=document.getElementById('text');
- const txt=input.value.trim(); if(!txt)return;
- addMsg(txt,'user'); input.value='';
- if(txt.includes('الصورة')||txt.includes('صورة')){ addMsg('الصورة تحت - فيك تحفظها! 🖼️ (ميزة الرسم تحتاج مفتاح Gemini)','ai'); return; }
- if(!apiKey){ addMsg('هاد وضع بدون مفتاح. حط مفتاح Gemini المجاني بالإعدادات ⚙️ مشان احكي مثل ChatGPT بلهجتك: '+document.getElementById('dialect').value,'ai'); return; }
+ const i=document.getElementById('text'); const txt=i.value.trim(); if(!txt)return; add(txt,'user'); i.value=''; add('⏳ عم فكر...','ai');
  try{
-   const dialect=document.getElementById('dialect').value;
-   const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,{
-     method:'POST',headers:{'Content-Type':'application/json'},
-     body:JSON.stringify({contents:[{parts:[{text:`انت RBooSH AI مساعد سوري. جاوب بلهجة ${dialect}. سؤال المستخدم: ${txt}`}]}]})
-   });
-   const data=await res.json();
-   const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'ما فهمت، عيد؟';
-   addMsg(reply,'ai');
- }catch(e){ addMsg('خطأ بالاتصال، تأكد من المفتاح','ai'); }
+  const dialect=document.getElementById('dialect').value;
+  const prompt=encodeURIComponent(`انت RBooSH AI مساعد سوري ذكي من الحسكة. جاوب بلهجة ${dialect} فقط. خليك مضحك وقصير ومفيد. سؤال المستخدم: ${txt}`);
+  const r=await fetch(`https://text.pollinations.ai/${prompt}?model=openai`);
+  const t=await r.text();
+  document.getElementById('chat').lastChild.remove();
+  add(t,'ai');
+ }catch(e){document.getElementById('chat').lastChild.remove(); add('النت ضعيف، عيد المحاولة','ai')}
 }
-function addMsg(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
 document.getElementById('text').addEventListener('keypress',e=>{if(e.key==='Enter')send()});
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')
 </script>
 </body>
 </html>
