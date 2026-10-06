@@ -2,14 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBooSH AI</title>
+<title>RBooSH AI - يعمل بدون انترنت</title>
 <link rel="manifest" href="manifest.json">
+<script type="importmap">
+{"imports":{"@mlc-ai/web-llm":"https://esm.run/@mlc-ai/web-llm"}}
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f0f0f;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;display:flex;justify-content:space-between}
+header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;display:flex;justify-content:space-between;align-items:center}
+#status{background:#ff6a00;color:#000;padding:6px;text-align:center;font-size:12px}
 #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.6;font-size:15px}
+.msg{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.6}
 .user{background:#ff6a00;color:#000;align-self:flex-end}
 .ai{background:#1e1e1e;align-self:flex-start;white-space:pre-wrap}
 #bar{background:#1a1a1a;padding:10px;display:flex;gap:8px}
@@ -18,32 +22,44 @@ header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;disp
 </style>
 </head>
 <body>
-<header><b>🇸🇾 RBooSH AI</b><select id="dialect" style="background:#2a2a2a;color:#fff;border:none;padding:6px;border-radius:8px"><option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>كردي كرمانجي</option><option>Deutsch</option></select></header>
-<div id="chat"><div class="msg ai">أهلين! أنا RBooSH AI جاهز 🔥
-اكتب أي شي هلا ورح جاوبك فوراً!</div></div>
-<div id="bar"><input id="text" placeholder="اكتب هون..."><button onclick="send()">➤</button></div>
-<script>
-function add(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;const ch=document.getElementById('chat');ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
-async function tryHackClub(prompt){
- const r=await fetch('https://ai.hackclub.com/proxy/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'qwen/qwen3-32b',messages:[{role:'user',content:prompt}]})});
- const j=await r.json(); return j.choices[0].message.content;
-}
-async function tryPolli(prompt){
- const r=await fetch('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&json=false'); return await r.text();
-}
-async function send(){
- const i=document.getElementById('text'); const txt=i.value.trim(); if(!txt)return; add(txt,'user'); i.value='';
- const loading=add('⏳...','ai');
- const dialect=document.getElementById('dialect').value;
- const prompt=`انت RBooSH AI مساعد سوري من الحسكة. جاوب بلهجة ${dialect} فقط باختصار ومضحك. سؤال: ${txt}`;
+<header><b>🇸🇾 RBooSH AI - OFFLINE</b><select id="dialect" style="background:#2a2a2a;color:#fff;border:none;padding:6px;border-radius:8px"><option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>كردي كرمانجي</option></select></header>
+<div id="status">⏳ اول مرة رح يحمل 500MB وبعدها يشتغل بدون نت للأبد...</div>
+<div id="chat"><div class="msg ai">أهلين! انا RBooSH AI الجديد 🔥
+هلا صرت ذكاء يشتغل جوا جوالك - ما بدي لا Google ولا Groq ولا Pollinations!
+
+اذا هاي أول مرة افتح الموقع وخليه يحمل (دقيقتين) وبعدها احكي معي ولو طفيت النت!
+
+مستحيل ينحظر بعد اليوم!</div></div>
+<div id="bar"><input id="text" placeholder="استنى التحميل يخلص..." disabled><button onclick="send()" id="btn" disabled>➤</button></div>
+<script type="module">
+import * as webllm from "@mlc-ai/web-llm";
+let engine;
+let chat=document.getElementById('chat');
+function add(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=99999;return d}
+async function init(){
  try{
-  let ans=null;
-  try{ ans=await tryHackClub(prompt); }catch(e){}
-  if(!ans || ans.length<5){ ans=await tryPolli(prompt); }
-  loading.textContent=ans;
- }catch(e){ loading.textContent='حاول مرة تانية - السيرفر مضغوط شوي'; console.log(e); }
+  engine=await webllm.CreateMLCEngine("Llama-3.2-1B-Instruct-q4f32_1-MLC",{
+   initProgressCallback:(p)=>{document.getElementById('status').textContent=p.text}
+  });
+  document.getElementById('status').textContent="✅ جاهز! يشتغل بدون نت هلا";
+  document.getElementById('text').disabled=false; document.getElementById('btn').disabled=false;
+  document.getElementById('text').placeholder="اكتب هون...";
+ }catch(e){document.getElementById('status').textContent="خطأ: "+e.message}
 }
-text.addEventListener('keypress',e=>{if(e.key==='Enter')send()});
+init();
+window.send=async function(){
+ const i=document.getElementById('text'); const txt=i.value.trim(); if(!txt)return; add(txt,'user'); i.value='';
+ const loading=add('⏳ عم فكر جوا جوالك...','ai');
+ const dialect=document.getElementById('dialect').value;
+ try{
+  const reply=await engine.chat.completions.create({
+   messages:[{role:"system",content:`انت RBooSH AI مساعد سوري من الحسكة. جاوب بلهجة ${dialect} باختصار ومضحك.`},{role:"user",content:txt}],
+   temperature:0.8
+  });
+  loading.textContent=reply.choices[0].message.content;
+ }catch(e){loading.textContent="عيد المحاولة"}
+}
+document.getElementById('text').addEventListener('keypress',e=>{if(e.key==='Enter')window.send()});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')
 </script>
 </body>
