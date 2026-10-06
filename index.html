@@ -2,43 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBooSH AI - سوريا</title>
+<title>RBooSH AI</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff6a00">
+<script src="https://js.puter.com/v2/"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f0f0f;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;display:flex;justify-content:space-between}
+header{background:#1a1a1a;padding:12px 16px;border-bottom:2px solid #ff6a00;display:flex;justify-content:space-between;align-items:center}
 #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.6}
 .user{background:#ff6a00;color:#000;align-self:flex-end}
 .ai{background:#1e1e1e;align-self:flex-start;white-space:pre-wrap}
 #bar{background:#1a1a1a;padding:10px;display:flex;gap:8px}
 #bar input{flex:1;background:#2a2a2a;border:none;color:#fff;padding:12px;border-radius:20px;outline:none}
-#bar button{background:#ff6a00;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer}
+#bar button{background:#ff6a00;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px}
 </style>
 </head>
 <body>
-<header><b>RBooSH AI 🇸🇾</b><select id="dialect" style="background:#2a2a2a;color:#fff;border:none;padding:6px;border-radius:8px"><option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>ديري</option><option>كردي كرمانجي</option><option>كردي سوراني</option><option>Deutsch</option><option>Türkçe</option><option>عربي فصحى</option></select></header>
-<div id="chat"><div class="msg ai">أهلين حبيب! أنا RBooSH AI 😎🇸🇾
-هلا شغال 100% بسوريا بدون حظر وبدون مفتاح!
+<header><b>🇸🇾 RBooSH AI</b><select id="dialect" style="background:#2a2a2a;color:#fff;border:none;padding:6px;border-radius:8px"><option>حسكاوي</option><option>شامي</option><option>حلبي</option><option>ديري</option><option>كردي كرمانجي</option><option>كردي سوراني</option><option>Deutsch</option><option>Türkçe</option><option>عربي فصحى</option></select></header>
+<div id="chat"><div class="msg ai">أهلين حبيب! 😎🔥
+أنا RBooSH AI - هلا شغال 100% بسوريا!
 
-احكي معي بأي لهجة تريد - حسكاوي، كردي، شامي... انا جاهز!
+ما بدي مفتاح ولا VPN، احكي معي بأي لهجة:
+حسكاوي، كردي، شامي، الماني...
 
 شو بدك نحكي؟</div></div>
-<div id="bar"><input id="text" placeholder="اكتب هون بأي لغة..."><button onclick="send()">➤</button></div>
+<div id="bar"><input id="text" placeholder="اكتب هون..."><button onclick="send()">➤</button></div>
 <script>
-function add(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;document.getElementById('chat').appendChild(d);document.getElementById('chat').scrollTop=99999}
+function add(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;const ch=document.getElementById('chat');ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
 async function send(){
- const i=document.getElementById('text'); const txt=i.value.trim(); if(!txt)return; add(txt,'user'); i.value=''; add('⏳ عم فكر...','ai');
+ const input=document.getElementById('text'); const txt=input.value.trim(); if(!txt)return; add(txt,'user'); input.value='';
+ const loading=add('⏳ عم فكر...','ai');
  try{
   const dialect=document.getElementById('dialect').value;
-  const prompt=encodeURIComponent(`انت RBooSH AI مساعد سوري ذكي من الحسكة. جاوب بلهجة ${dialect} فقط. خليك مضحك وقصير ومفيد. سؤال المستخدم: ${txt}`);
-  const r=await fetch(`https://text.pollinations.ai/${prompt}?model=openai`);
-  const t=await r.text();
-  document.getElementById('chat').lastChild.remove();
-  add(t,'ai');
- }catch(e){document.getElementById('chat').lastChild.remove(); add('النت ضعيف، عيد المحاولة','ai')}
+  const response=await puter.ai.chat(`انت RBooSH AI مساعد سوري من الحسكة. جاوب حصرا بلهجة ${dialect}. كن قصير ومضحك ومفيد جدا. سؤال المستخدم: ${txt}`, {model:'claude-3-5-sonnet'});
+  loading.textContent=response;
+ }catch(e){
+  loading.textContent='النت ضعيف، عيد المحاولة مرة تانية';
+  console.log(e);
+ }
 }
 document.getElementById('text').addEventListener('keypress',e=>{if(e.key==='Enter')send()});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')
